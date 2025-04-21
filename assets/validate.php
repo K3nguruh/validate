@@ -4,9 +4,10 @@
  * Klasse Validate
  *
  * Diese Klasse enthält eine Sammlung von Methoden zur Validierung von Eingabedaten.
- * Sie ermöglicht es, Werte auf Vorhandensein, Übereinstimmung mit bestimmten Mustern
- * (z. B. regulären Ausdrücken) sowie auf numerische und datumsbezogene Anforderungen zu prüfen.
- * Besonders nützlich ist sie für Webanwendungen, in denen Benutzereingaben überprüft werden müssen.
+ * Sie ermöglicht es, Werte auf Vorhandensein, Übereinstimmung mit bestimmten
+ * Mustern (z. B. regulären Ausdrücken) sowie auf numerische und datumsbezogene
+ * Anforderungen zu prüfen. Besonders nützlich ist sie für Webanwendungen, in denen
+ * Benutzereingaben überprüft werden müssen.
  *
  *
  * Funktionalitäten
@@ -19,19 +20,19 @@
  *
  *
  * Autor:   K3nguruh <https://github.com/K3nguruh>
- * Version: 1.0.0
- * Datum:   2025-02-26 00:42
+ * Version: 1.1.0
+ * Datum:   2025-04-21 17:17
  * Lizenz:  MIT-Lizenz
  */
 
 class Validate
 {
   /**
-   * Prüft, ob ein Wert vorhanden und nicht leer ist.
+   * Prüfung auf nicht-leeren Wert
    *
-   * Diese Methode überprüft, ob der übergebene Wert nicht leer ist. Dabei werden leere
-   * Zeichenketten (auch solche, die nur aus Leerzeichen bestehen), null, false sowie
-   * leere Arrays als leer gewertet.
+   * Diese Methode prüft, ob der übergebene Wert nicht leer ist. Dabei erkennt sie
+   * leere Zeichenketten, Zeichenfolgen mit nur Leerzeichen, null, false und leere Arrays
+   * als leere Werte.
    *
    * Beispiel:
    * validateRequired("Test");  // true
@@ -39,8 +40,8 @@ class Validate
    * validateRequired("   ");   // false
    * validateRequired(null);    // false
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @return bool Gibt true zurück, wenn der Wert nicht leer ist, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @return bool True wenn der Wert nicht leer ist, ansonsten False
    */
   public function validateRequired(mixed $value): bool
   {
@@ -48,39 +49,61 @@ class Validate
   }
 
   /**
-   * Vergleicht zwei Werte auf exakte Gleichheit.
+   * Prüfung auf inhaltliche Gleichheit
    *
-   * Diese Methode überprüft, ob beide übergebenen Werte exakt übereinstimmen. Dabei
-   * wird der strikte Vergleichsoperator (===) verwendet, der sowohl den Wert als auch
-   * den Datentyp berücksichtigt.
+   * Diese Methode prüft, ob zwei Werte inhaltlich übereinstimmen. Sie verwendet
+   * den nicht-strikten Vergleichsoperator (==), der Typkonvertierungen durchführt und
+   * nur den Inhalt, nicht aber den Datentyp berücksichtigt.
    *
    * Beispiel:
-   * validateEqual(5, 5);            // true
-   * validateEqual("Test", "Test");  // true
-   * validateEqual(5, "5");          // false
+   * validateEqual(5, 5);    // true
+   * validateEqual(5, "5");  // true
+   * validateEqual(5, 6);    // false
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @param mixed $compare Der Wert, mit dem verglichen werden soll.
-   * @return bool Gibt true zurück, wenn die Werte exakt übereinstimmen, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $compare Der Wert, mit dem verglichen werden soll
+   * @return bool True wenn die Werte inhaltlich übereinstimmen, ansonsten False
    */
   public function validateEqual(mixed $value, mixed $compare): bool
   {
-    return $value === $compare;
+    return $value == $compare;
   }
 
   /**
-   * Prüft, ob ein Wert einem regulären Ausdruck entspricht.
+   * Prüfung auf inhaltliche Ungleichheit
    *
-   * Diese Methode vergleicht den gesamten übergebenen Wert mit dem angegebenen
-   * regulären Ausdruck. Der Wert muss dabei vollständig dem Muster entsprechen.
+   * Diese Methode prüft, ob zwei Werte inhaltlich nicht übereinstimmen. Sie verwendet
+   * den nicht-strikten Ungleichheitsoperator (!=), der Typkonvertierungen durchführt und
+   * nur den Inhalt, nicht aber den Datentyp berücksichtigt.
+   *
+   * Beispiel:
+   * validateNotEqual(5, 6);    // true
+   * validateNotEqual(5, "6");  // true
+   * validateNotEqual(5, "5");  // false
+   *
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $compare Der Wert, mit dem verglichen werden soll
+   * @return bool True wenn die Werte inhaltlich nicht übereinstimmen, ansonsten False
+   */
+  public function validateNotEqual(mixed $value, mixed $compare): bool
+  {
+    return $value != $compare;
+  }
+
+  /**
+   * Prüfung auf Musterübereinstimmung
+   *
+   * Diese Methode prüft, ob ein Wert vollständig einem regulären Ausdruck entspricht.
+   * Der übergebene Wert muss dabei komplett dem angegebenen Muster entsprechen, damit
+   * die Validierung erfolgreich ist.
    *
    * Beispiel:
    * validateMatch("abc123", "^[a-z0-9]+$");   // true
    * validateMatch("abc-123", "^[a-z0-9]+$");  // false
    *
-   * @param string $value Der zu überprüfende Wert.
-   * @param string $regex Der reguläre Ausdruck.
-   * @return bool Gibt true zurück, wenn der Wert dem regulären Ausdruck entspricht, andernfalls false.
+   * @param string $value Der zu überprüfende Wert
+   * @param string $regex Der reguläre Ausdruck
+   * @return bool True wenn der Wert dem regulären Ausdruck entspricht, ansonsten False
    */
   public function validateMatch(string $value, string $regex): bool
   {
@@ -88,18 +111,18 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Text keine HTML-Tags enthält.
+   * Prüfung auf reinen Text ohne HTML
    *
-   * Diese Methode entfernt alle HTML-Tags aus dem übergebenen Text und vergleicht
-   * den bereinigten Text mit dem Original. Stimmen beide überein, so enthält der Text
-   * keine HTML-Tags.
+   * Diese Methode prüft, ob ein Text keine HTML-Tags enthält. Sie entfernt alle
+   * HTML-Tags aus dem Text und vergleicht dann das Ergebnis mit dem Original.
+   * Stimmen beide überein, enthält der Text keine HTML-Tags.
    *
    * Beispiel:
    * validateText("Hello World");         // true
    * validateText("<p>Hello World</p>");  // false
    *
-   * @param string $value Der zu überprüfende Wert.
-   * @return bool Gibt true zurück, wenn der Wert keine HTML-Tags enthält, andernfalls false.
+   * @param string $value Der zu überprüfende Wert
+   * @return bool True wenn der Wert keine HTML-Tags enthält, ansonsten False
    */
   public function validateText(string $value): bool
   {
@@ -108,11 +131,11 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein HTML-Text nur erlaubte Tags enthält.
+   * Prüfung auf Text mit erlaubten HTML-Tags
    *
-   * Diese Methode entfernt alle HTML-Tags, die nicht in der Liste der erlaubten Tags enthalten
-   * sind, und vergleicht den bereinigten Text mit dem Original. Wird kein Wert für $allowedTags
-   * übergeben, kommt eine Standardliste gängiger Formatierungstags zum Einsatz.
+   * Diese Methode prüft, ob ein HTML-Text nur erlaubte Tags enthält. Sie entfernt
+   * alle nicht erlaubten Tags und vergleicht das Ergebnis mit dem Original. Ohne
+   * Angabe erlaubter Tags wird eine Standardliste gängiger Formatierungstags verwendet.
    *
    * Standard erlaubte Tags:
    * <a>, <b>, <blockquote>, <br>, <code>, <div>, <em>, <h1>-<h6>, <hr>, <i>,
@@ -124,9 +147,9 @@ class Validate
    * validateHtml("<p>Test</p>", "<p>");                          // true
    * validateHtml("<p><b>Test</b></p>", "<p>");                   // false
    *
-   * @param string $value Der zu überprüfende Wert.
-   * @param string|null $allowedTags (Optional) Eine Zeichenfolge, die die erlaubten HTML-Tags enthält.
-   * @return bool Gibt true zurück, wenn der Wert nur erlaubte HTML-Tags enthält, andernfalls false.
+   * @param string $value Der zu überprüfende Wert
+   * @param string|null $allowedTags Eine Zeichenfolge mit erlaubten HTML-Tags (optional)
+   * @return bool True wenn der Wert nur erlaubte HTML-Tags enthält, ansonsten False
    */
   public function validateHtml(string $value, ?string $allowedTags = null): bool
   {
@@ -136,17 +159,18 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert eine gültige E-Mail-Adresse ist.
+   * Prüfung auf gültige E-Mail-Adresse
    *
-   * Diese Methode verwendet PHPs integrierten E-Mail-Filter, um zu überprüfen, ob der
-   * übergebene Wert das Format einer gültigen E-Mail-Adresse besitzt.
+   * Diese Methode prüft, ob ein Wert das Format einer gültigen E-Mail-Adresse aufweist.
+   * Dabei wird PHPs integrierter E-Mail-Filter verwendet, der verschiedene Aspekte
+   * wie Domainstruktur und Syntaxregeln überprüft.
    *
    * Beispiel:
    * validateEmail("test@example.com");  // true
    * validateEmail("invalid-email");     // false
    *
-   * @param string $value Der zu überprüfende Wert.
-   * @return bool Gibt true zurück, wenn der Wert eine gültige E-Mail-Adresse ist, andernfalls false.
+   * @param string $value Der zu überprüfende Wert
+   * @return bool True wenn der Wert eine gültige E-Mail-Adresse ist, ansonsten False
    */
   public function validateEmail(string $value): bool
   {
@@ -154,17 +178,18 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert eine gültige URL ist.
+   * Prüfung auf gültige URL
    *
-   * Diese Methode verwendet PHPs integrierten URL-Filter, um zu überprüfen, ob der
-   * übergebene Wert das Format einer gültigen URL besitzt.
+   * Diese Methode prüft, ob ein Wert das Format einer gültigen URL aufweist.
+   * Sie nutzt PHPs integrierten URL-Filter, der Schema, Domain und allgemeine
+   * Syntax einer URL überprüft.
    *
    * Beispiel:
    * validateUrl("https://www.example.com");  // true
    * validateUrl("invalid-url");              // false
    *
-   * @param string $value Der zu überprüfende Wert.
-   * @return bool Gibt true zurück, wenn der Wert eine gültige URL ist, andernfalls false.
+   * @param string $value Der zu überprüfende Wert
+   * @return bool True wenn der Wert eine gültige URL ist, ansonsten False
    */
   public function validateUrl(string $value): bool
   {
@@ -172,19 +197,20 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert ein gültiges Datum im angegebenen Format ist.
+   * Prüfung auf gültiges Datum
    *
-   * Diese Methode erstellt ein Datum anhand des übergebenen Formats und vergleicht, ob
-   * der formatierte Wert exakt dem ursprünglichen Wert entspricht. So wird sichergestellt,
-   * dass sowohl das Format als auch das Datum selbst gültig sind.
+   * Diese Methode prüft, ob ein Wert ein gültiges Datum im angegebenen Format darstellt.
+   * Sie erstellt ein DateTime-Objekt aus dem Wert und vergleicht dessen formatierte
+   * Darstellung mit dem Original, um sicherzustellen, dass sowohl Format als auch
+   * das Datum selbst gültig sind.
    *
    * Beispiel:
    * validateDate("2025-01-17", "Y-m-d");  // true
    * validateDate("17-01-2025", "Y-m-d");  // false
    *
-   * @param string $value Der zu überprüfende Wert.
-   * @param string $format Das Datumsformat.
-   * @return bool Gibt true zurück, wenn der Wert ein gültiges Datum ist, andernfalls false.
+   * @param string $value Der zu überprüfende Wert
+   * @param string $format Das Datumsformat
+   * @return bool True wenn der Wert ein gültiges Datum im angegebenen Format ist, ansonsten False
    */
   public function validateDate(string $value, string $format = "Y-m-d"): bool
   {
@@ -193,21 +219,23 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert mindestens einen bestimmten Grenzwert erreicht.
+   * Prüfung auf Mindestwert (inklusiv)
    *
-   * Diese Methode vergleicht den übergebenen Wert mit einem Mindestwert. Bei Zahlen wird der
-   * numerische Vergleich durchgeführt, bei Strings wird die Länge des Textes und bei Datumswerten
-   * der Zeitpunkt verglichen. Optional kann ein Datumsformat angegeben werden.
+   * Diese Methode prüft, ob ein Wert einen festgelegten Mindestwert erreicht oder überschreitet.
+   * Je nach Datentyp werden unterschiedliche Vergleiche durchgeführt:
+   * - Bei numerischen Werten: direkter Zahlenvergleich
+   * - Bei Strings: Vergleich der Zeichenkettenlänge
+   * - Bei Datumswerten: chronologischer Vergleich (mit optionalem Formatparameter)
    *
    * Beispiel:
    * validateMin(10, 5);                                // true
    * validateMin(5, 10);                                // false
    * validateMin("2025-01-17", "2025-01-01", "Y-m-d");  // true
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @param mixed $minValue Der minimale Wert.
-   * @param string|null $format Das Datumsformat, falls der Wert ein Datum ist (Standard: null).
-   * @return bool Gibt true zurück, wenn der Wert größer oder gleich dem minimalen Wert ist, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $minValue Der minimale Wert
+   * @param string|null $format Das Datumsformat, falls nötig (Standard: null)
+   * @return bool True wenn der Wert >= dem Minimum ist, ansonsten False
    */
   public function validateMin(mixed $value, mixed $minValue, ?string $format = null): bool
   {
@@ -226,21 +254,23 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert höchstens einen bestimmten Grenzwert erreicht.
+   * Prüfung auf Maximalwert (inklusiv)
    *
-   * Diese Methode vergleicht den übergebenen Wert mit einem Maximalwert. Bei Zahlen wird der
-   * numerische Vergleich durchgeführt, bei Strings wird die Länge des Textes und bei Datumswerten
-   * der Zeitpunkt verglichen. Optional kann ein Datumsformat angegeben werden.
+   * Diese Methode prüft, ob ein Wert einen festgelegten Maximalwert nicht überschreitet.
+   * Je nach Datentyp werden unterschiedliche Vergleiche durchgeführt:
+   * - Bei numerischen Werten: direkter Zahlenvergleich
+   * - Bei Strings: Vergleich der Zeichenkettenlänge
+   * - Bei Datumswerten: chronologischer Vergleich (mit optionalem Formatparameter)
    *
    * Beispiel:
    * validateMax(5, 10);                                // true
    * validateMax(15, 10);                               // false
    * validateMax("2024-12-31", "2025-01-01", "Y-m-d");  // true
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @param mixed $maxValue Der maximale Wert.
-   * @param string|null $format Das Datumsformat, falls der Wert ein Datum ist (Standard: null).
-   * @return bool Gibt true zurück, wenn der Wert kleiner oder gleich dem maximalen Wert ist, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $maxValue Der maximale Wert
+   * @param string|null $format Das Datumsformat, falls nötig (Standard: null)
+   * @return bool True wenn der Wert <= dem Maximum ist, ansonsten False
    */
   public function validateMax(mixed $value, mixed $maxValue, ?string $format = null): bool
   {
@@ -259,23 +289,22 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert zwischen zwei Grenzwerten liegt (inklusive der Grenzen).
+   * Prüfung auf Wert im Bereich (inklusiv)
    *
-   * Diese Methode kombiniert die Überprüfungen auf Mindest- und Maximalwert, um zu prüfen, ob
-   * der übergebene Wert zwischen zwei Grenzwerten liegt. Es werden numerische Vergleiche,
-   * Vergleiche der Zeichenlänge bei Strings sowie Zeitvergleiche bei Datumswerten (optional
-   * mit Format) durchgeführt.
+   * Diese Methode prüft, ob ein Wert zwischen zwei Grenzwerten liegt, wobei die
+   * Grenzen eingeschlossen sind. Je nach Datentyp werden numerische Vergleiche,
+   * Textlängenvergleiche oder Datumsvergleiche durchgeführt.
    *
    * Beispiel:
-   * validateMinMax(7, 5, 10);                                           // true
-   * validateMinMax(4, 5, 10);                                           // false
+   * validateMinMax(7, 5, 10);                                    // true
+   * validateMinMax(4, 5, 10);                                    // false
    * validateMinMax("2025-01-02", "2025-01-01", "2025-01-03", "Y-m-d");  // true
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @param mixed $minValue Der minimale Wert.
-   * @param mixed $maxValue Der maximale Wert.
-   * @param string|null $format Das Datumsformat, falls der Wert ein Datum ist (Standard: null).
-   * @return bool Gibt true zurück, wenn der Wert zwischen dem minimalen und maximalen Wert liegt, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $minValue Der minimale Wert
+   * @param mixed $maxValue Der maximale Wert
+   * @param string|null $format Das Datumsformat, falls nötig (Standard: null)
+   * @return bool True wenn der Wert zwischen Min und Max liegt (inklusiv), ansonsten False
    */
   public function validateMinMax(mixed $value, mixed $minValue, mixed $maxValue, ?string $format = null): bool
   {
@@ -283,21 +312,21 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert kleiner als ein bestimmter Grenzwert ist.
+   * Prüfung auf kleineren Wert (exklusiv)
    *
-   * Diese Methode vergleicht den übergebenen Wert mit einem Maximalwert. Dabei wird bei
-   * Zahlen der numerische Wert, bei Strings die Zeichenlänge und bei Datumswerten der
-   * Zeitpunkt (optional mit Format) verglichen.
+   * Diese Methode prüft, ob ein Wert strikt kleiner als ein festgelegter Grenzwert ist.
+   * Je nach Datentyp werden numerische Vergleiche, Textlängenvergleiche oder
+   * Datumsvergleiche durchgeführt.
    *
    * Beispiel:
    * validateLess(5, 10);                                // true
    * validateLess(15, 10);                               // false
    * validateLess("2024-12-31", "2025-01-01", "Y-m-d");  // true
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @param mixed $maxValue Der maximale Wert.
-   * @param string|null $format Das Datumsformat, falls der Wert ein Datum ist (Standard: null).
-   * @return bool Gibt true zurück, wenn der Wert kleiner als der maximale Wert ist, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $maxValue Der maximale Wert
+   * @param string|null $format Das Datumsformat, falls nötig (Standard: null)
+   * @return bool True wenn der Wert < dem Maximum ist, ansonsten False
    */
   public function validateLess(mixed $value, mixed $maxValue, ?string $format = null): bool
   {
@@ -316,21 +345,21 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert größer als ein bestimmter Grenzwert ist.
+   * Prüfung auf größeren Wert (exklusiv)
    *
-   * Diese Methode vergleicht den übergebenen Wert mit einem Mindestwert. Bei Zahlen wird
-   * der numerische Vergleich durchgeführt, bei Strings wird die Länge des Textes und bei
-   * Datumswerten der Zeitpunkt (optional mit Format) verglichen.
+   * Diese Methode prüft, ob ein Wert strikt größer als ein festgelegter Grenzwert ist.
+   * Je nach Datentyp werden numerische Vergleiche, Textlängenvergleiche oder
+   * Datumsvergleiche durchgeführt.
    *
    * Beispiel:
    * validateGreater(10, 5);                                // true
    * validateGreater(5, 10);                                // false
    * validateGreater("2025-01-02", "2025-01-01", "Y-m-d");  // true
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @param mixed $minValue Der minimale Wert.
-   * @param string|null $format Das Datumsformat, falls der Wert ein Datum ist (Standard: null).
-   * @return bool Gibt true zurück, wenn der Wert größer als der minimale Wert ist, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $minValue Der minimale Wert
+   * @param string|null $format Das Datumsformat, falls nötig (Standard: null)
+   * @return bool True wenn der Wert > dem Minimum ist, ansonsten False
    */
   public function validateGreater(mixed $value, mixed $minValue, ?string $format = null): bool
   {
@@ -349,12 +378,12 @@ class Validate
   }
 
   /**
-   * Prüft, ob ein Wert zwischen zwei Grenzwerten liegt (exklusive der Grenzen).
+   * Prüfung auf Wert im Bereich (exklusiv)
    *
-   * Diese Methode überprüft, ob der übergebene Wert größer als der Mindestwert und
-   * gleichzeitig kleiner als der Maximalwert ist. Bei Zahlen wird der numerische Vergleich,
-   * bei Strings die Zeichenlänge und bei Datumswerten (optional mit Format) der Zeitpunkt
-   * verglichen.
+   * Diese Methode prüft, ob ein Wert zwischen zwei Grenzwerten liegt, wobei die
+   * Grenzen ausgeschlossen sind. Der Wert muss strikt größer als der Mindestwert und
+   * strikt kleiner als der Maximalwert sein. Je nach Datentyp werden unterschiedliche
+   * Vergleiche durchgeführt.
    *
    * Beispiel:
    * validateBetween(7, 5, 10);                                           // true
@@ -362,11 +391,11 @@ class Validate
    * validateBetween(10, 5, 10);                                          // false
    * validateBetween("2025-01-02", "2025-01-01", "2025-01-03", "Y-m-d");  // true
    *
-   * @param mixed $value Der zu überprüfende Wert.
-   * @param mixed $minValue Der minimale Wert.
-   * @param mixed $maxValue Der maximale Wert.
-   * @param string|null $format Das Datumsformat, falls der Wert ein Datum ist (Standard: null).
-   * @return bool Gibt true zurück, wenn der Wert zwischen dem minimalen und maximalen Wert liegt, andernfalls false.
+   * @param mixed $value Der zu überprüfende Wert
+   * @param mixed $minValue Der minimale Wert
+   * @param mixed $maxValue Der maximale Wert
+   * @param string|null $format Das Datumsformat, falls nötig (Standard: null)
+   * @return bool True wenn der Wert zwischen Min und Max liegt (exklusiv), ansonsten False
    */
   public function validateBetween(mixed $value, mixed $minValue, mixed $maxValue, ?string $format = null): bool
   {
